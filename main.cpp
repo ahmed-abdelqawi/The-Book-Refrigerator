@@ -1,115 +1,160 @@
 #include <iostream>
-#include<string>
-
 using namespace std;
 
-const int COLLS = 3;
 const int ROWS = 100;
+const int COLLS = 3;
 
 string books[ROWS][COLLS];
-int bookCount = 0;
+int counter = 0;
 
-
-void userInterface();
-
+// Functions Area
 void _addNewBook();
-void displayShelf_();
+void displayTheList_();
+void delBook();
 
-int main(){
+// UI Area
+void userCommands_();
+void menu_();
+void clearTerminal();
 
-    userInterface();
+int main()
+{
+    while (true)
+    {
+        menu_();
+    }
 
-    // Code by Fishy, on falcon using Arch, btw.
+    // Code by Fishy @falcon.
     return 0;
 }
 
-void userInterface(){
+void menu_()
+{
+    cout << "==== The Book Refrigerator ====" << "\n";
+    cout << "1. Add New Book." << "\n";
+    cout << "2. Display The Book List." << "\n";
+    cout << "3. Delete A Book." << "\n";
+    cout << "4. Clear The Terminal." << "\n";
+    cout << "5. Exit" << "\n";
+    cout << "==== Jeffry Dahmer's Refrigerator Productions ====" << "\n";
 
-    cout << "=====Digital Bookshelf=====" << "\n";
-    cout << "1. Add new book." << "\n";
-    cout << "2. List all books." << "\n";
-    cout << "3. Search for a book by it's title." << "\n";
-    cout << "4. Delete a book by it's number." << "\n";
-    cout << "5. Count of books for an Author." << "\n";
-    cout << "6. Quit!" << "\n";
-    cout << "=====Jeffry Dahemr's Refrigerator Production=====" << "\n";
+    userCommands_();
+}
 
+void userCommands_()
+{
     int choice;
-    cout << "Make your choice: ";
+    cout << "\n--Make Your Choice: ";
     cin >> choice;
     cin.ignore();
 
     switch (choice)
     {
-        case 1: 
-            _addNewBook();
-            break;
-
-        case 2: 
-            displayShelf_(); 
-            break;
-
-        case 3: 
-            cout << "book found!"; 
-            break;
-
-        case 4: 
-            cout << "book deleted!"; 
-            break;
-
-        case 5: 
-            cout << "you have X books"; 
-            break;
-
-        case 6:
-            cout << "GG Commander!";
-            return;
-            break;
-
-        default: 
-            break;
+    case 1:
+        _addNewBook();
+        break;
+    case 2:
+        displayTheList_();
+        break;
+    case 3:
+        displayTheList_();
+        delBook();
+        break;
+    case 4:
+        clearTerminal();
+        break;
+    case 5:
+        cout << "\nGG Commander!\n";
+        exit(0);
+    default:
+        cout << "Invalid choice!\n";
+        break;
     }
-
 }
 
-void _addNewBook(){
-
-    cout << "\n---- Add a New Book ----\n";
-
-    cout << "Title: "; 
-    getline(cin, books[bookCount][0]);
-
-    cout << "Author: "; 
-    getline(cin, books[bookCount][1]);
-
-    cout << "Year of publish: "; 
-    getline(cin, books[bookCount][2]);
-
-    bookCount ++;
-    cout << "---- Book Added Successfully ----\n";
-
-    displayShelf_();
+void clearTerminal()
+{
+#ifdef _WIN32
+    system("cls");
+#else
+    system("clear");
+#endif
 }
 
-void displayShelf_(){
+// Functions Area
+void _addNewBook()
+{
+    cout << "\n------ Adding A New Book ------\n";
+    cout << "\n";
 
-    if (bookCount == 0){
-        cout << "\n ohh.. The Refrigerator is empty!" << endl;
-        return; // For now!
+    cout << "Title: ";
+    getline(cin, books[counter][0]);
+
+    cout << "Author: ";
+    getline(cin, books[counter][1]);
+
+    cout << "Year: ";
+    getline(cin, books[counter][2]);
+
+    counter++;
+
+    cout << "\n------ Book Added Successfully ------\n";
+    cout << "\n";
+}
+
+void displayTheList_()
+{
+    cout << "\n------ The Refrigerator ------\n";
+    cout << "\n";
+
+    if (counter == 0)
+    {
+        cout << "The List is Empty!\n";
     }
 
-    cout << "\n---- The Refrigerator ----\n";
+    int displayRowNum = 1;
 
-    for (int i = 0; i < bookCount; ++i){
-
-        cout << (i + 1) << ". ";
-
-        for (int j = 0; j < COLLS; ++j){
-            cout << books[i][j] << "\t";
+    for (int i = 0; i < counter; ++i)
+    {
+        if (books[i][1] == "")
+        {
+            continue;
         }
 
+        cout << displayRowNum++ << ". ";
+        for (int j = 0; j < COLLS; ++j)
+        {
+            cout << books[i][j] << "  ";
+        }
         cout << "\n";
     }
 
-    cout << "---- Eat Well Commander ----\n";
+    cout << "\n------ The End ------\n";
+    cout << "\n";
+}
+
+void delBook()
+{
+    int _exe;
+    cout << "Choose a book number: ";
+    cin >> _exe;
+    cin.ignore();
+
+    if (_exe <= 0 || _exe > counter)
+    {
+        cout << "Invalid book number!\n";
+        return;
+    }
+
+    for (int i = _exe - 1; i < counter - 1; i++)
+    {
+        books[i][0] = books[i + 1][0];
+        books[i][1] = books[i + 1][1];
+        books[i][2] = books[i + 1][2];
+    }
+
+    counter--;
+
+    cout << "\n------ Book Terminated! ------\n";
+    cout << "\n";
 }
