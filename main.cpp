@@ -1,76 +1,80 @@
 #include <iostream>
+#include <string>
 using namespace std;
 
 const int ROWS = 100;
 const int COLLS = 3;
+const int TITLE_COL = 0;
+const int AUTHOR_COL = 1;
+const int YEAR_COL = 2;
 
 string books[ROWS][COLLS];
 int counter = 0;
 
-// Functions Area
-void _addNewBook();
-void displayTheList_();
-void delBook();
-void searchTitle();
-void countAuthor();
+// Function
+void addNewBook();
+void displayBookList();
+void deleteBook();
+void searchByTitle();
+void countByAuthor();
 
-// UI Area
-void userCommands_();
-void menu_();
-void clearTerminal();
+// UI Functions
+void clearScreen();
+void showMenu();
+void handleUserChoice();
 
 int main()
 {
     while (true)
     {
-        menu_();
+        showMenu();
     }
 
-    // Code by Fishy @falcon.
+    // Code By Fishy @falcon, on Arch, btw.
     return 0;
 }
 
-void menu_()
+void showMenu()
 {
-    cout << "==== The Book Refrigerator ====" << "\n";
-    cout << "1. Add New Book." << "\n";
-    cout << "2. Display The Book List." << "\n";
-    cout << "3. Delete A Book." << "\n";
-    cout << "4. Search For A Book By Its Title." << "\n";
-    cout << "5. Count Books By Author." << "\n";
-    cout << "6. Exit" << "\n";
-    cout << "==== Jeffry Dahmer's Refrigerator Productions ====" << "\n";
+    cout << "==== The Book Refrigerator ====\n"
+         << "1. Add New Book\n"
+         << "2. Display All Books\n"
+         << "3. Delete a Book\n"
+         << "4. Search by Title\n"
+         << "5. Count Books by Author\n"
+         << "6. Exit\n"
+         << "==== Jeffry Dahmer's Refrigerator Productions ====\n";
 
-    userCommands_();
+    handleUserChoice();
 }
 
-void userCommands_()
+void handleUserChoice()
 {
     int choice;
-    cout << "\n--Make Your Choice: ";
+    cout << "\nEnter your choice: ";
     cin >> choice;
     cin.ignore();
 
     switch (choice)
     {
     case 1:
-        _addNewBook();
+        addNewBook();
         break;
     case 2:
-        displayTheList_();
+        displayBookList();
         break;
     case 3:
-        displayTheList_();
-        delBook();
+        deleteBook();
         break;
     case 4:
-        searchTitle();
+        searchByTitle();
         break;
     case 5:
-        countAuthor();
+        countByAuthor();
         break;
     case 6:
-        cout << "\nGG Commander!\n";
+        clearScreen();
+        cout << "Goodbye, Commander!\n";
         exit(0);
     default:
         cout << "Invalid choice!\n";
@@ -78,7 +82,7 @@ void userCommands_()
     }
 }
 
-void clearTerminal()
+void clearScreen()
 {
 #ifdef _WIN32
     system("cls");
@@ -87,163 +91,156 @@ void clearTerminal()
 #endif
 }
 
-// Functions Area
-void _addNewBook()
+void addNewBook()
 {
-    clearTerminal();
-
-    cout << "\n------ Adding A New Book ------\n";
-    cout << "\n";
+    clearScreen();
+    cout << "\n--- Add New Book ---\n";
 
     cout << "Title: ";
-    getline(cin, books[counter][0]);
+    getline(cin, books[counter][TITLE_COL]);
 
     cout << "Author: ";
-    getline(cin, books[counter][1]);
+    getline(cin, books[counter][AUTHOR_COL]);
 
     cout << "Year: ";
-    getline(cin, books[counter][2]);
+    getline(cin, books[counter][YEAR_COL]);
 
     counter++;
-
-    cout << "\n------ Book Added Successfully ------\n";
-    cout << "\n";
+    cout << "\nBook added successfully!\n"
+         << "\n";
 }
 
-void displayTheList_()
+void displayBookList()
 {
-    clearTerminal();
-
-    cout << "\n------ The Refrigerator ------\n";
-    cout << "\n";
+    clearScreen();
+    cout << "\n---------------- The Refrigerator ---------------\n";
+    cout << "No.  Title               Author              Year\n";
+    cout << "-------------------------------------------------\n";
 
     if (counter == 0)
     {
-        cout << "The List is Empty!\n";
-    }
-
-    int displayRowNum = 1;
-
-    for (int i = 0; i < counter; ++i)
-    {
-        if (books[i][1] == "")
-        {
-            continue;
-        }
-
-        cout << displayRowNum++ << ". ";
-        for (int j = 0; j < COLLS; ++j)
-        {
-            cout << books[i][j] << "  ";
-        }
-        cout << "\n";
-    }
-
-    cout << "\n------ The End ------\n";
-    cout << "\n";
-}
-
-void delBook()
-{
-    int _exe;
-    cout << "Choose a book number: ";
-    cin >> _exe;
-    cin.ignore();
-
-    if (_exe <= 0 || _exe > counter)
-    {
-        cout << "Invalid book number!\n";
+        cout << "The Refrigerator is empty.\n"
+             << "-------------------------------------------------\n";
         return;
     }
 
-    for (int i = _exe - 1; i < counter - 1; i++)
+    for (int i = 0; i < counter; i++)
     {
-        books[i][0] = books[i + 1][0];
-        books[i][1] = books[i + 1][1];
-        books[i][2] = books[i + 1][2];
+        if (books[i][TITLE_COL].empty())
+            continue;
+
+        cout << (i + 1) << ".   ";
+
+        // The Output With Padding So It Will Look Cool...
+        cout << books[i][TITLE_COL];
+        int titleSpaces = 20 - books[i][TITLE_COL].length();
+        if (titleSpaces > 0)
+            cout << string(titleSpaces, ' ');
+
+        cout << books[i][AUTHOR_COL];
+        int authorSpaces = 20 - books[i][AUTHOR_COL].length();
+        if (authorSpaces > 0)
+            cout << string(authorSpaces, ' ');
+
+        cout << books[i][YEAR_COL] << "\n";
+    }
+    cout << "-------------------------------------------------\n"
+         << "\n";
+}
+
+void deleteBook()
+{
+    displayBookList();
+    if (counter == 0)
+    {
+        cout << "Press Enter to continue...";
+        cin.ignore();
+        return;
+    }
+
+    int bookNum;
+    cout << "\nEnter book number to delete: ";
+    cin >> bookNum;
+    cin.ignore();
+
+    if (bookNum < 1 || bookNum > counter)
+    {
+        cout << "Invalid book number!\n";
+        cout << "Press Enter to continue...";
+        cin.ignore();
+        return;
+    }
+
+    for (int i = bookNum - 1; i < counter - 1; i++)
+    {
+        books[i][TITLE_COL] = books[i + 1][TITLE_COL];
+        books[i][AUTHOR_COL] = books[i + 1][AUTHOR_COL];
+        books[i][YEAR_COL] = books[i + 1][YEAR_COL];
     }
 
     counter--;
-
-    cout << "\n------ Book Terminated! ------\n";
-    cout << "\n";
+    cout << "\nBook deleted successfully!\n";
+    cout << "Press Enter to continue...";
+    cin.ignore();
 }
 
-void searchTitle()
+void searchByTitle()
 {
-    clearTerminal();
-
-    string target;
-    cout << "\nEnter the Book Title: ";
-    getline(cin, target);
+    clearScreen();
+    string title;
+    cout << "\nEnter book title: ";
+    getline(cin, title);
 
     bool found = false;
-    for (int i = 0; i < counter; ++i)
+    for (int i = 0; i < counter; i++)
     {
-        if (books[i][0] == target)
+        if (books[i][TITLE_COL] == title)
         {
             found = true;
-        }
-
-        if (found)
-        {
-            for (int j = 0; j < COLLS; ++j)
-            {
-                if (found)
-                {
-                    cout << books[i][j] << "  ";
-                }
-            }
-            cout << "\n";
+            cout << "\nFound: "
+                 << books[i][TITLE_COL] << " | "
+                 << books[i][AUTHOR_COL] << " | "
+                 << books[i][YEAR_COL] << "\n";
             break;
         }
     }
 
-    if (!found || counter == 0)
+    if (!found)
     {
-        cout << "Book Not Found!\n";
+        cout << "\nBook not found!\n";
     }
+    cout << "Press Enter to continue...";
+    cin.ignore();
 }
 
-void countAuthor()
+void countByAuthor()
 {
-    clearTerminal();
+    clearScreen();
+    string author;
+    cout << "\nEnter author name: ";
+    getline(cin, author);
 
-    string target;
-    cout << "Enter The Author Name: ";
-    getline(cin, target);
-    cout << "\n";
-
-    int num = 1;
-
-    bool found = false, r = false;
-    for (int i = 0; i < counter; ++i)
+    int count = 0;
+    cout << "\nBooks by " << author << ":\n";
+    for (int i = 0; i < counter; i++)
     {
-        if (books[i][1] == target)
+        if (books[i][AUTHOR_COL] == author)
         {
-            found = true;
-        }
-        else if (books[i][1] != target)
-        {
-            found = false;
-        }
-
-        if (found)
-        {
-            r = true;
-            cout << num++ << ". ";
-
-            for (int j = 0; j < COLLS; ++j)
-            {
-                cout << books[i][j] << "  ";
-            }
-            cout << "\n";
+            count++;
+            cout << count << ". "
+                 << books[i][TITLE_COL] << " ("
+                 << books[i][YEAR_COL] << ")\n";
         }
     }
-    cout << "\n";
 
-    if (!r)
+    if (count == 0)
     {
-        cout << "\nAuthor Not Found!\n";
+        cout << "No books found for this author.\n";
     }
+    else
+    {
+        cout << "\nTotal: " << count << " book(s)\n";
+    }
+    cout << "Press Enter to continue...";
+    cin.ignore();
 }
