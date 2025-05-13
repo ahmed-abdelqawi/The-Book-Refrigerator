@@ -11,6 +11,7 @@ int counter = 0;
 void _addNewBook();
 void displayTheList_();
 void delBook();
+void searchTitle();
 
 // UI Area
 void userCommands_();
@@ -35,7 +36,8 @@ void menu_()
     cout << "2. Display The Book List." << "\n";
     cout << "3. Delete A Book." << "\n";
     cout << "4. Clear The Terminal." << "\n";
-    cout << "5. Exit" << "\n";
+    cout << "5. Search For A Book By Its Title." << "\n";
+    cout << "6. Exit" << "\n";
     cout << "==== Jeffry Dahmer's Refrigerator Productions ====" << "\n";
 
     userCommands_();
@@ -64,6 +66,9 @@ void userCommands_()
         clearTerminal();
         break;
     case 5:
+        searchTitle();
+        break;
+    case 6:
         cout << "\nGG Commander!\n";
         exit(0);
     default:
@@ -157,4 +162,38 @@ void delBook()
 
     cout << "\n------ Book Terminated! ------\n";
     cout << "\n";
+}
+
+void searchTitle()
+{
+    string target;
+    cout << "\nEnter the Book Title: ";
+    getline(cin, target);
+
+    bool found = false;
+    for (int i = 0; i < counter; ++i)
+    {
+        if (books[i][0] == target)
+        {
+            found = true;
+        }
+
+        if (found)
+        {
+            for (int j = 0; j < COLLS; ++j)
+            {
+                if (found)
+                {
+                    cout << books[i][j] << "  ";
+                }
+            }
+            cout << "\n";
+            break;
+        }
+    }
+
+    if (!found || counter == 0)
+    {
+        cout << "Book Not Found!\n";
+    }
 }
