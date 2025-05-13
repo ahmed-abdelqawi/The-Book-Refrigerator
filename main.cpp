@@ -12,6 +12,7 @@ void _addNewBook();
 void displayTheList_();
 void delBook();
 void searchTitle();
+void countAuthor();
 
 // UI Area
 void userCommands_();
@@ -35,8 +36,8 @@ void menu_()
     cout << "1. Add New Book." << "\n";
     cout << "2. Display The Book List." << "\n";
     cout << "3. Delete A Book." << "\n";
-    cout << "4. Clear The Terminal." << "\n";
-    cout << "5. Search For A Book By Its Title." << "\n";
+    cout << "4. Search For A Book By Its Title." << "\n";
+    cout << "5. Count Books By Author." << "\n";
     cout << "6. Exit" << "\n";
     cout << "==== Jeffry Dahmer's Refrigerator Productions ====" << "\n";
 
@@ -63,10 +64,10 @@ void userCommands_()
         delBook();
         break;
     case 4:
-        clearTerminal();
+        searchTitle();
         break;
     case 5:
-        searchTitle();
+        countAuthor();
         break;
     case 6:
         cout << "\nGG Commander!\n";
@@ -89,6 +90,8 @@ void clearTerminal()
 // Functions Area
 void _addNewBook()
 {
+    clearTerminal();
+
     cout << "\n------ Adding A New Book ------\n";
     cout << "\n";
 
@@ -109,6 +112,8 @@ void _addNewBook()
 
 void displayTheList_()
 {
+    clearTerminal();
+
     cout << "\n------ The Refrigerator ------\n";
     cout << "\n";
 
@@ -166,6 +171,8 @@ void delBook()
 
 void searchTitle()
 {
+    clearTerminal();
+
     string target;
     cout << "\nEnter the Book Title: ";
     getline(cin, target);
@@ -195,5 +202,48 @@ void searchTitle()
     if (!found || counter == 0)
     {
         cout << "Book Not Found!\n";
+    }
+}
+
+void countAuthor()
+{
+    clearTerminal();
+
+    string target;
+    cout << "Enter The Author Name: ";
+    getline(cin, target);
+    cout << "\n";
+
+    int num = 1;
+
+    bool found = false, r = false;
+    for (int i = 0; i < counter; ++i)
+    {
+        if (books[i][1] == target)
+        {
+            found = true;
+        }
+        else if (books[i][1] != target)
+        {
+            found = false;
+        }
+
+        if (found)
+        {
+            r = true;
+            cout << num++ << ". ";
+
+            for (int j = 0; j < COLLS; ++j)
+            {
+                cout << books[i][j] << "  ";
+            }
+            cout << "\n";
+        }
+    }
+    cout << "\n";
+
+    if (!r)
+    {
+        cout << "\nAuthor Not Found!\n";
     }
 }
